@@ -1,0 +1,100 @@
+#!/bin/bash
+
+
+# Setup Hostname
+
+hostnamectl set-hostname "jfrog.cloudbinary.io"
+
+
+# Configure Hostname unto hosts file
+
+
+echo "`hostname -I | awk '{ print $1}'` `hostname`" >> /etc/hosts
+ 
+ cat /etc/hosts
+
+# Update the Repository on Ubuntu 18.04
+
+sudo apt-get update
+
+
+# Install required utility softwares
+
+sudo apt-get install vim curl elinks unzip wget tree git -y
+
+
+# Download, Install Java 11
+
+sudo apt-get install openjdk-11-jdk -y
+
+
+# Backup the Environment File
+
+sudo cp -pvr /etc/environment "/etc/environment_$(date +%F_%R)"
+
+ls -lrt /etc/environment*
+# Create Environment Variables
+
+echo "JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/" >> /etc/environment
+
+cat /etc/environment
+# Compile the Configuration
+
+source /etc/environment
+
+
+# Common Software Properties
+
+sudo apt install software-properties-common -y
+sudo apt install default-jre
+
+# add the repository key and file to Ubuntu.
+#wget -O artifactory-pro.deb "https://releases.jfrog.io/artifactory/artifactory-pro-debs/pool/jfrog-artifactory-pro/jfrog-artifactory-pro-[RELEASE].deb"#
+wget -qO - https://api.bintray.com/orgs/jfrog/keys/gpg/public.key | sudo apt-key add -
+
+wget -qO - https://api.bintray.com/orgs/jfrog/keys/gpg/public.key | sudo apt-key add -
+
+
+# Add Jfrog URL
+
+sudo add-apt-repository "deb [arch=amd64] https://jfrog.bintray.com/artifactory-debs $(lsb_release -cs) main"
+echo "deb https://jfrog.bintray.com/artifactory-debs focal main" | sudo tee /etc/apt/sources.list.d/jfrog.list
+echo "deb https://jfrog.bintray.com/artifactory-debs bionic main" | sudo tee /etc/apt/sources.list.d/jfrog.list
+#wget -O artifactory-pro.deb "https://releases.jfrog.io/artifactory/artifactory-pro-debs/pool/jfrog-artifactory-pro/jfrog-artifactory-pro-[RELEASE].deb"
+#sudo apt install ./artifactory-pro.deb -y
+#sudo systemctl start artifactory.serviceSS
+# Update the Repository on Ubuntu 18.04
+
+sudo apt-get update
+
+
+# Install Jfrog
+
+sudo apt install jfrog-artifactory-oss -y
+sudo apt install ./artifactory-pro.deb -y
+
+# Start Jfrog Service
+
+# sudo systemctl status artifactory.service
+
+# sudo systemctl stop artifactory.service
+
+# sudo systemctl start artifactory.service
+
+# sudo systemctl restart artifactory.service
+
+# sudo systemctl enable artifactory.service
+
+
+# Open Browser and Validate
+
+
+# http://65.0.124.225:8081
+
+
+# UserName : admin ; Password : password
+
+Santhosh@1996
+wget https://jfrog.bintray.com/artifactory/jfrog-artifactory-oss-6.9.6.zip
+unzip jfrog-artifactory-oss-6.9.6.zip
+cd /opt/jfrog-artifactory-oss-6.9.6/bin./artifactory.sh start
